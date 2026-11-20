@@ -1,0 +1,1011 @@
+/* ==========================================================================
+   Company Researcher - Dark Premium Neumorphic AI Interface
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Design Tokens & Theme Variables
+   -------------------------------------------------------------------------- */
+:root {
+  color-scheme: dark;
+
+  /* Color Palette */
+  --bg: #0d1117;
+  --bg-gradient: radial-gradient(circle at 50% 28%, #172133 0%, #0d1117 62%, #07090f 100%);
+  --bg-lines: repeating-linear-gradient(
+    45deg,
+    rgba(29, 155, 240, 0.05) 0px,
+    rgba(29, 155, 240, 0.05) 1px,
+    transparent 1px,
+    transparent 7px
+  );
+
+  --surface: #111522;
+  --surface-2: #161b2c;
+  --surface-elevated: #1a2034;
+  --surface-bezel: #070a14;
+  --surface-field-top: #15182e;
+  --surface-field-bottom: #0f1222;
+
+  --border: rgba(255, 255, 255, 0.08);
+  --border-subtle: rgba(255, 255, 255, 0.04);
+  --border-strong: rgba(255, 255, 255, 0.14);
+  --border-focus: rgba(29, 155, 240, 0.55);
+
+  --text: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+
+  --accent: #1d9bf0;
+  --accent-cyan: #0ea5e9;
+  --accent-light: #38bdf8;
+  --accent-glow: 0 0 25px rgba(29, 155, 240, 0.35), 0 0 50px rgba(14, 165, 233, 0.15);
+
+  --success: #10b981;
+  --success-bg: rgba(16, 185, 129, 0.12);
+  --success-border: rgba(16, 185, 129, 0.3);
+
+  --warning: #f59e0b;
+  --warning-bg: rgba(245, 158, 11, 0.12);
+  --warning-border: rgba(245, 158, 11, 0.3);
+
+  --danger: #ef4444;
+  --danger-bg: rgba(239, 68, 68, 0.12);
+  --danger-border: rgba(239, 68, 68, 0.3);
+
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --radius-pill: 9999px;
+  --radius-card: 18px;
+  --radius-sm: 8px;
+
+  --max-col: 760px;
+  --transition-fast: 180ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-smooth: 240ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* --------------------------------------------------------------------------
+   2. Base Reset & Background
+   -------------------------------------------------------------------------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  background-color: var(--bg);
+  background-image: var(--bg-lines), var(--bg-gradient);
+  background-attachment: fixed;
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+}
+
+/* Focus rings */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   3. Application Shell
+   -------------------------------------------------------------------------- */
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  position: relative;
+  overflow: hidden;
+}
+
+/* --------------------------------------------------------------------------
+   4. Slim Header (Active Chat State)
+   -------------------------------------------------------------------------- */
+.app-header {
+  height: 56px;
+  border-bottom: 1px solid var(--border-subtle);
+  background: rgba(13, 17, 23, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  flex-shrink: 0;
+  z-index: 40;
+  transition: opacity var(--transition-smooth), transform var(--transition-smooth);
+}
+
+.header-inner {
+  max-width: var(--max-col);
+  height: 100%;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+
+.header-badge {
+  font-size: 0.725rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  background: rgba(29, 155, 240, 0.12);
+  color: var(--accent-light);
+  border: 1px solid rgba(29, 155, 240, 0.3);
+  border-radius: var(--radius-pill);
+}
+
+/* Header Ghost Button */
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: inherit;
+  font-size: 0.825rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: transparent;
+  border: 1px solid var(--border);
+  padding: 6px 12px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-ghost:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--border-strong);
+}
+
+.btn-ghost:active {
+  transform: scale(0.97);
+}
+
+/* --------------------------------------------------------------------------
+   5. Content Scroll Container
+   -------------------------------------------------------------------------- */
+.content-scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  scroll-behavior: smooth;
+  padding-bottom: 24px;
+}
+
+.column-container {
+  width: 100%;
+  max-width: var(--max-col);
+  margin: 0 auto;
+  padding: 20px 20px 10px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+/* --------------------------------------------------------------------------
+   6. Hero Section (Empty State)
+   -------------------------------------------------------------------------- */
+.hero-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin: auto 0;
+  padding: 40px 10px 30px;
+  animation: heroEntrance 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes heroEntrance {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hero-logo-badge {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.hero-glow-ring {
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(29, 155, 240, 0.4) 0%, rgba(14, 165, 233, 0.1) 60%, transparent 80%);
+  filter: blur(14px);
+  pointer-events: none;
+}
+
+.hero-mark {
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 0 16px rgba(29, 155, 240, 0.6));
+}
+
+.hero-title {
+  font-size: 2.25rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: #ffffff;
+  margin-bottom: 10px;
+  background: linear-gradient(180deg, #ffffff 30%, #cbd5e1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-tagline {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+/* --------------------------------------------------------------------------
+   7. Messages Feed (Active State)
+   -------------------------------------------------------------------------- */
+.messages-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+.message-item {
+  display: flex;
+  flex-direction: column;
+  animation: messageRise 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes messageRise {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* User Message */
+.user-item {
+  align-self: flex-end;
+  max-width: 82%;
+}
+
+.user-bubble {
+  background: linear-gradient(135deg, #1d9bf0 0%, #0284c7 100%);
+  color: #ffffff;
+  padding: 13px 18px;
+  border-radius: 20px 20px 4px 20px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  box-shadow: 0 6px 18px -2px rgba(2, 132, 199, 0.35);
+  word-break: break-word;
+}
+
+/* Agent Message Card */
+.agent-item {
+  align-self: flex-start;
+  width: 100%;
+}
+
+.agent-card {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  padding: 20px 22px;
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5), 0 0 1px rgba(255, 255, 255, 0.1);
+  position: relative;
+}
+
+.agent-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.agent-avatar-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.agent-avatar-icon {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(29, 155, 240, 0.15);
+  border-radius: 6px;
+  color: var(--accent-light);
+}
+
+.agent-name-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+/* Copy Icon Button */
+.btn-copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: inherit;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-copy:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--border-strong);
+}
+
+.btn-copy:active {
+  transform: scale(0.96);
+}
+
+/* Plain Safe Text in Agent Card */
+.agent-prose {
+  color: var(--text);
+  font-size: 0.95rem;
+  line-height: 1.65;
+  word-break: break-word;
+}
+
+.agent-prose strong {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.agent-prose ul {
+  margin: 8px 0 8px 20px;
+}
+
+.agent-prose li {
+  margin-bottom: 4px;
+}
+
+/* --------------------------------------------------------------------------
+   8. Structured Report Card Component
+   -------------------------------------------------------------------------- */
+.report-card-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.report-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.report-company-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+}
+
+.report-company-link {
+  font-size: 0.825rem;
+  color: var(--accent-light);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  background: rgba(29, 155, 240, 0.08);
+  border: 1px solid rgba(29, 155, 240, 0.2);
+  transition: all var(--transition-fast);
+}
+
+.report-company-link:hover {
+  background: rgba(29, 155, 240, 0.16);
+  border-color: rgba(29, 155, 240, 0.4);
+  color: #ffffff;
+}
+
+.report-section {
+  padding-top: 14px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.report-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.report-body {
+  color: #cbd5e1;
+  font-size: 0.935rem;
+  line-height: 1.6;
+}
+
+/* Automation Task Highlighted Sub-Card */
+.automation-subcard {
+  margin-top: 8px;
+  background: rgba(29, 155, 240, 0.03);
+  border: 1px solid rgba(29, 155, 240, 0.16);
+  border-left: 3px solid var(--accent);
+  border-radius: 8px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.automation-row {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.automation-row-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--accent-light);
+  text-transform: uppercase;
+}
+
+.automation-row-value {
+  font-size: 0.92rem;
+  color: #e2e8f0;
+  line-height: 1.5;
+}
+
+/* Confidence Row & Badges */
+.confidence-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.badge-confidence {
+  font-size: 0.725rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: var(--radius-pill);
+}
+
+.badge-high {
+  background: var(--success-bg);
+  color: #34d399;
+  border: 1px solid var(--success-border);
+}
+
+.badge-medium {
+  background: var(--warning-bg);
+  color: #fbbf24;
+  border: 1px solid var(--warning-border);
+}
+
+.badge-low {
+  background: var(--danger-bg);
+  color: #f87171;
+  border: 1px solid var(--danger-border);
+}
+
+.confidence-reason {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+/* --------------------------------------------------------------------------
+   9. Typing Indicator Card
+   -------------------------------------------------------------------------- */
+.typing-indicator {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 12px 18px;
+  border-radius: var(--radius-card);
+  align-self: flex-start;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  margin-top: 4px;
+  animation: messageRise 0.2s ease-out;
+}
+
+.typing-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(29, 155, 240, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.typing-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dots-pulse {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.dots-pulse span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-light);
+  animation: pulseDot 1.4s infinite ease-in-out both;
+}
+
+.dots-pulse span:nth-child(1) { animation-delay: -0.32s; }
+.dots-pulse span:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes pulseDot {
+  0%, 80%, 100% { transform: scale(0.4); opacity: 0.35; }
+  40% { transform: scale(1.1); opacity: 1; filter: drop-shadow(0 0 4px var(--accent)); }
+}
+
+.typing-label {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+/* --------------------------------------------------------------------------
+   10. Inline Error Cards
+   -------------------------------------------------------------------------- */
+.error-card {
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: var(--radius-card);
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  color: #fca5a5;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.error-message {
+  flex: 1;
+  line-height: 1.5;
+}
+
+.btn-retry {
+  background: rgba(239, 68, 68, 0.15);
+  color: #fef2f2;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-retry:hover {
+  background: rgba(239, 68, 68, 0.3);
+}
+
+/* --------------------------------------------------------------------------
+   11. Floating "Jump to Latest" Button
+   -------------------------------------------------------------------------- */
+.jump-to-bottom {
+  position: fixed;
+  bottom: 124px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(17, 21, 34, 0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: var(--accent-light);
+  border: 1px solid rgba(29, 155, 240, 0.45);
+  border-radius: var(--radius-pill);
+  padding: 7px 16px;
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6), 0 0 12px rgba(29, 155, 240, 0.2);
+  cursor: pointer;
+  z-index: 50;
+  transition: all var(--transition-fast);
+  animation: jumpEntrance 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes jumpEntrance {
+  from { opacity: 0; transform: translate(-50%, 6px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+.jump-to-bottom:hover {
+  background: var(--surface-2);
+  border-color: var(--accent);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7), 0 0 16px rgba(29, 155, 240, 0.35);
+}
+
+/* --------------------------------------------------------------------------
+   12. Signature Dock & Input Bar (Matching Reference)
+   -------------------------------------------------------------------------- */
+.dock-container {
+  width: 100%;
+  position: relative;
+  flex-shrink: 0;
+  z-index: 30;
+  transition: transform var(--transition-smooth), margin var(--transition-smooth);
+}
+
+/* Upward gradient fade mask above sticky dock */
+.dock-fade {
+  position: absolute;
+  top: -34px;
+  left: 0;
+  right: 0;
+  height: 34px;
+  background: linear-gradient(to top, rgba(13, 17, 23, 0.98) 0%, rgba(13, 17, 23, 0) 100%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--transition-smooth);
+}
+
+.dock-inner {
+  max-width: var(--max-col);
+  margin: 0 auto;
+  padding: 0 20px 14px;
+  display: flex;
+  flex-direction: column;
+}
+
+.signature-form {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* Outer Layered Bezel */
+.signature-bezel {
+  position: relative;
+  background-color: var(--surface-bezel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  padding: 4px;
+  box-shadow: 0 14px 34px -4px rgba(0, 0, 0, 0.65), 0 2px 6px rgba(0, 0, 0, 0.4);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.signature-bezel:focus-within {
+  border-color: rgba(29, 155, 240, 0.35);
+  box-shadow: 0 16px 38px -4px rgba(0, 0, 0, 0.75), 0 0 20px rgba(29, 155, 240, 0.15);
+}
+
+/* Glowing Cyan-Blue Accent on Left Edge */
+.bezel-glow-accent {
+  position: absolute;
+  left: -2px;
+  top: 10%;
+  bottom: 10%;
+  width: 95px;
+  background: linear-gradient(90deg, #1d9bf0 0%, #0ea5e9 45%, transparent 100%);
+  border-radius: var(--radius-pill);
+  filter: blur(12px);
+  opacity: 0.65;
+  pointer-events: none;
+  transition: opacity var(--transition-smooth), filter var(--transition-smooth), width var(--transition-smooth);
+}
+
+.signature-bezel:focus-within .bezel-glow-accent {
+  opacity: 1;
+  filter: blur(16px);
+  width: 130px;
+}
+
+/* Inner Field */
+.signature-field {
+  position: relative;
+  z-index: 2;
+  background: linear-gradient(180deg, var(--surface-field-top) 0%, var(--surface-field-bottom) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.065);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), inset 0 -1px 0 rgba(0, 0, 0, 0.5);
+  border-radius: var(--radius-pill);
+  min-height: 58px;
+  display: flex;
+  align-items: center;
+  padding: 6px 8px 6px 20px;
+  gap: 12px;
+}
+
+/* Auto-growing Textarea */
+.signature-textarea {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  resize: none;
+  font-family: inherit;
+  font-size: 16px; /* Prevents auto-zoom on mobile safari */
+  color: var(--text);
+  line-height: 1.45;
+  padding: 6px 0;
+  max-height: 120px;
+  overflow-y: auto;
+}
+
+.signature-textarea::placeholder {
+  color: var(--text-muted);
+  transition: color var(--transition-fast);
+}
+
+.signature-textarea:focus::placeholder {
+  color: #475569;
+}
+
+/* Send Button with Plane & Sparkles */
+.signature-send-btn {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all var(--transition-fast);
+  color: var(--text);
+}
+
+.signature-send-btn:hover:not(:disabled) {
+  transform: scale(1.05);
+}
+
+.signature-send-btn:hover:not(:disabled) .plane-body,
+.signature-send-btn:hover:not(:disabled) .plane-fold {
+  stroke: #ffffff;
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.6));
+}
+
+.signature-send-btn:hover:not(:disabled) .sparkle {
+  animation: sparkleTwinkle 1s infinite alternate;
+}
+
+@keyframes sparkleTwinkle {
+  0% { transform: scale(0.9); opacity: 0.8; filter: drop-shadow(0 0 4px #38bdf8); }
+  100% { transform: scale(1.2); opacity: 1; filter: drop-shadow(0 0 8px #0ea5e9); }
+}
+
+.signature-send-btn:active:not(:disabled) {
+  transform: scale(0.94);
+}
+
+.signature-send-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* --------------------------------------------------------------------------
+   13. Suggestion Chips (Ghost Pills)
+   -------------------------------------------------------------------------- */
+.chips-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+  transition: opacity var(--transition-smooth), transform var(--transition-smooth);
+}
+
+.chip-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  color: var(--text-secondary);
+  font-family: inherit;
+  font-size: 0.84rem;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.chip-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--accent);
+  box-shadow: 0 0 8px var(--accent);
+}
+
+.chip-ghost:hover {
+  color: #ffffff;
+  background: rgba(29, 155, 240, 0.08);
+  border-color: rgba(29, 155, 240, 0.45);
+  box-shadow: 0 0 16px rgba(29, 155, 240, 0.22);
+  transform: translateY(-2px);
+}
+
+.chip-ghost:active {
+  transform: translateY(0);
+}
+
+/* Dock Disclaimer Note */
+.dock-disclaimer {
+  text-align: center;
+  font-size: 0.73rem;
+  color: var(--text-muted);
+  margin-top: 10px;
+}
+
+/* --------------------------------------------------------------------------
+   14. State Transitions (Empty vs Active Chat)
+   -------------------------------------------------------------------------- */
+
+/* EMPTY STATE: Hero and Input Bar centered together as a unified hero block */
+.app[data-state="empty"] {
+  justify-content: center;
+  align-items: center;
+}
+
+.app[data-state="empty"] .app-header {
+  display: none;
+}
+
+.app[data-state="empty"] .content-scroll {
+  flex: 0 0 auto;
+  overflow: visible;
+  padding-bottom: 0;
+  width: 100%;
+}
+
+.app[data-state="empty"] .column-container {
+  min-height: auto;
+  padding: 0 20px;
+}
+
+.app[data-state="empty"] .hero-section {
+  margin: 0 auto 28px;
+  padding: 0;
+}
+
+.app[data-state="empty"] .dock-container {
+  margin-top: 0;
+  margin-bottom: 0;
+  width: 100%;
+}
+
+/* ACTIVE CHAT STATE */
+.app[data-state="chat"] .app-header {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.app[data-state="chat"] .hero-section {
+  display: none;
+}
+
+.app[data-state="chat"] .dock-fade {
+  opacity: 1;
+}
+
+.app[data-state="chat"] .chips-row {
+  display: none;
+}
+
+.app[data-state="chat"] .dock-container {
+  margin-top: auto;
+}
+
+/* --------------------------------------------------------------------------
+   15. Accessibility & Reduced Motion
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   16. Mobile & Responsive Layout
+   -------------------------------------------------------------------------- */
+@media (max-width: 680px) {
+  .hero-title {
+    font-size: 1.85rem;
+  }
+
+  .hero-tagline {
+    font-size: 0.95rem;
+  }
+
+  .column-container {
+    padding: 14px 14px 6px;
+  }
+
+  .dock-inner {
+    padding: 0 14px 10px;
+  }
+
+  .user-item {
+    max-width: 90%;
+  }
+
+  .agent-card {
+    padding: 16px;
+  }
+
+  .signature-field {
+    min-height: 52px;
+    padding-left: 16px;
+  }
+
+  .signature-send-btn {
+    width: 42px;
+    height: 42px;
+  }
+}
